@@ -16,7 +16,7 @@ cur.execute("""
     FROM pipeline_errors 
     WHERE analyzed = TRUE AND recommendation IS NOT NULL 
     ORDER BY in_ts DESC 
-    LIMIT 1
+    LIMIT 1 
 """)
 row = cur.fetchone()
 
