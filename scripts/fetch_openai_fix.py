@@ -24,3 +24,8 @@ if row:
     with open("sql/openai_fix.sql", "w") as f:
         f.write(f"-- Original SQL:\n-- {row[1]}\n\n-- Fix Suggested by OpenAI:\n{row[2]}")
     cur.execute(f"UPDATE pipeline_errors SET analyzed = FALSE WHERE id = {row[0]}")
+    print(f"Fix written to sql/openai_fix.sql for error ID {row[0]}")
+else:
+    print("No analyzed pipeline errors with recommendations found.")
+    with open("sql/openai_fix.sql", "w") as f:
+        f.write("-- No fix available.\n")
