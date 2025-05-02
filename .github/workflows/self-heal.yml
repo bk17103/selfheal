@@ -26,7 +26,7 @@ jobs:
 
       - name: Commit fix and create branch
         run: |
-          git config --global user.email "barkul.kumar@gmail.com.com"
+          git config --global user.email "barkul.kumar@gmail.com"
           git checkout -b fix/openai-recommendation
           git add sql/openai_fix.sql
           git commit -m "Self-healing: Apply OpenAI fix for pipeline error"
