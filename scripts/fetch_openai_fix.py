@@ -15,7 +15,7 @@ cur.execute("""
     SELECT id, failed_sql, recommendation 
     FROM pipeline_errors 
     WHERE analyzed = TRUE AND recommendation IS NOT NULL 
-    ORDER BY created_at DESC 
+    ORDER BY in_ts DESC 
     LIMIT 1
 """)
 row = cur.fetchone()
