@@ -31,11 +31,11 @@ jobs:
           git config --global user.name "bk17103"
           git config --global user.email "barkul.kumar@gmail.com"
           git fetch origin
-          git checkout -B fix/openai-recommendation origin/fix/openai-recommendation || git checkout -b fix/openai-recommendation
-          git pull origin fix/openai-recommendation || echo "No remote changes to pull"
+          git checkout -B fix/openai-recommendation || git checkout -b fix/openai-recommendation
           git add sql/openai_fix.sql
+          git status  # Debugging step to confirm changes are staged
           git commit -m "Self-healing: Apply OpenAI fix for pipeline error" || echo "No changes to commit"
-          git push origin fix/openai-recommendation --force-with-lease
+          git push origin fix/openai-recommendation --set-upstream
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
@@ -44,3 +44,4 @@ jobs:
           base: main  # Ensure the PR is created against the main branch
           title: "OpenAI-suggested fix for pipeline error"
           body: "This PR contains a fix generated via OpenAI based on a Snowflake error."
+          token: ${{ secrets.GITHUB_TOKEN }}
