@@ -33,9 +33,12 @@ jobs:
           git fetch origin
           git checkout -B fix/openai-recommendation || git checkout -b fix/openai-recommendation
           git add sql/openai_fix.sql
-          git commit -m "Self-healing: Apply OpenAI fix for pipeline error" || echo "No changes to commit"
-          git pull origin fix/openai-recommendation --rebase || (git rebase --abort && echo "Rebase aborted due to conflicts")
-          git push origin fix/openai-recommendation --force-with-lease || echo "Push failed"
+          if git diff --cached --quiet; then
+            echo "No changes detected in openai_fix.sql. Skipping commit and PR creation."
+            exit 0
+          fi
+          git commit -m "Self-healing: Apply OpenAI fix for pipeline error"
+          git push origin fix/openai-recommendation --force-with-lease
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6

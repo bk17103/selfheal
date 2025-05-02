@@ -41,5 +41,6 @@ else:
         os.makedirs(output_dir, exist_ok=True)
         with open(os.path.join(output_dir, "openai_fix.sql"), "w") as f:
             f.write("-- No fix available.\n")
+        print("Empty fix file created.")
     except Exception as e:
         print(f"Failed to write to sql/openai_fix.sql: {e}")
