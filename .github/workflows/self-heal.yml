@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: main  # Ensure the workflow starts from the default branch
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -37,5 +39,6 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           branch: fix/openai-recommendation
+          base: main  # Ensure the PR is created against the main branch
           title: "OpenAI-suggested fix for pipeline error"
           body: "This PR contains a fix generated via OpenAI based on a Snowflake error."
