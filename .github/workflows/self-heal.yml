@@ -1,0 +1,41 @@
+name: Self-Healing Pipeline Fix
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: pip install snowflake-connector-python
+
+      - name: Fetch OpenAI fix from Snowflake
+        run: python scripts/fetch_openai_fix.py
+
+      - name: Commit fix and create branch
+        run: |
+          git config --global user.name "OpenAI Bot"
+          git config --global user.email "bot@example.com"
+          git checkout -b fix/openai-recommendation
+          git add sql/openai_fix.sql
+          git commit -m "Self-healing: Apply OpenAI fix for pipeline error"
+          git push origin fix/openai-recommendation
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: fix/openai-recommendation
+          title: "OpenAI-suggested fix for pipeline error"
+          body: "This PR contains a fix generated via OpenAI based on a Snowflake error."
