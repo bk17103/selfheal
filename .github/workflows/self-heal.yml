@@ -26,6 +26,15 @@ jobs:
       - name: Fetch OpenAI fix from Snowflake
         run: python scripts/fetch_openai_fix.py
 
+      - name: Verify SQL file contents
+        run: |
+          if [ ! -s sql/openai_fix.sql ]; then
+            echo "Error: sql/openai_fix.sql is empty or missing."
+            exit 1
+          fi
+          echo "Contents of sql/openai_fix.sql:"
+          cat sql/openai_fix.sql
+
       - name: Commit fix and create branch
         run: |
           git config --global user.name "bk17103"
