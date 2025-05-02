@@ -4,7 +4,7 @@ import os
 conn = snowflake.connector.connect(
     user='BIHACK2025',
     password='December2039',
-    account='EV95053',
+    account='GQNAKNG-EV95053',
     warehouse='COMPUTE_WH',
     database='BIHACK2025',
     schema='DM'
