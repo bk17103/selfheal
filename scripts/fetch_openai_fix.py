@@ -1,5 +1,9 @@
 import snowflake.connector
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 conn = snowflake.connector.connect(
     user='BIHACK2025',
@@ -31,16 +35,16 @@ if row:
         with open(output_file, "w") as f:
             f.write(f"-- Original SQL:\n-- {row[1]}\n\n-- Fix Suggested by OpenAI:\n{row[2]}")
         cur.execute(f"UPDATE pipeline_errors SET analyzed = FALSE WHERE id = {row[0]}")
-        print(f"Fix written to {output_file} for error ID {row[0]}")
+        logging.info(f"Fix written to {output_file} for error ID {row[0]}")
     except Exception as e:
-        print(f"Failed to write to {output_file}: {e}")
+        logging.error(f"Failed to write to {output_file}: {e}")
 else:
-    print("No analyzed pipeline errors with recommendations found.")
+    logging.info("No analyzed pipeline errors with recommendations found.")
     try:
         output_dir = "sql"
         os.makedirs(output_dir, exist_ok=True)
         with open(os.path.join(output_dir, "openai_fix.sql"), "w") as f:
             f.write("-- No fix available.\n")
-        print("Empty fix file created.")
+        logging.info("Empty fix file created.")
     except Exception as e:
-        print(f"Failed to write to sql/openai_fix.sql: {e}")
+        logging.error(f"Failed to write to sql/openai_fix.sql: {e}")
