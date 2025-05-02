@@ -25,7 +25,10 @@ jobs:
         run: python scripts/fetch_openai_fix.py
 
       - name: Commit fix and create branch
-        run: |          
+        run: |
+          git config --global user.name "bk17103"
+          git config --global user.email "barkul.kumar@gmail.com"
+          git checkout -b fix/openai-recommendation
           git add sql/openai_fix.sql
           git commit -m "Self-healing: Apply OpenAI fix for pipeline error"
           git push origin fix/openai-recommendation
