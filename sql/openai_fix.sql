@@ -1,1 +1,1 @@
--- OpenAI will suggest SQL fixes here.
+-- OpenAI recommended fix for the issue with the `selfheal` schema

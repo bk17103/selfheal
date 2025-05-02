@@ -21,11 +21,23 @@ cur.execute("""
 row = cur.fetchone()
 
 if row:
-    with open("sql/openai_fix.sql", "w") as f:
-        f.write(f"-- Original SQL:\n-- {row[1]}\n\n-- Fix Suggested by OpenAI:\n{row[2]}")
-    cur.execute(f"UPDATE pipeline_errors SET analyzed = FALSE WHERE id = {row[0]}")
-    print(f"Fix written to sql/openai_fix.sql for error ID {row[0]}")
+    output_dir = "sql"
+    output_file = os.path.join(output_dir, "openai_fix.sql")
+    
+    # Ensure the directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    try:
+        with open(output_file, "w") as f:
+            f.write(f"-- Original SQL:\n-- {row[1]}\n\n-- Fix Suggested by OpenAI:\n{row[2]}")
+        cur.execute(f"UPDATE pipeline_errors SET analyzed = FALSE WHERE id = {row[0]}")
+        print(f"Fix written to {output_file} for error ID {row[0]}")
+    except Exception as e:
+        print(f"Failed to write to {output_file}: {e}")
 else:
     print("No analyzed pipeline errors with recommendations found.")
-    with open("sql/openai_fix.sql", "w") as f:
-        f.write("-- No fix available.\n")
+    try:
+        with open("sql/openai_fix.sql", "w") as f:
+            f.write("-- No fix available.\n")
+    except Exception as e:
+        print(f"Failed to write to sql/openai_fix.sql: {e}")
