@@ -37,7 +37,9 @@ if row:
 else:
     print("No analyzed pipeline errors with recommendations found.")
     try:
-        with open("sql/openai_fix.sql", "w") as f:
+        output_dir = "sql"
+        os.makedirs(output_dir, exist_ok=True)
+        with open(os.path.join(output_dir, "openai_fix.sql"), "w") as f:
             f.write("-- No fix available.\n")
     except Exception as e:
         print(f"Failed to write to sql/openai_fix.sql: {e}")
